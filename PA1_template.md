@@ -1,5 +1,10 @@
-# Reproducible Research: Peer Assessment 1
-Policarpio A. Soberanis  
+---
+title: "Reproducible Research: Peer Assessment 1"
+author: Policarpio A. Soberanis
+output: 
+  html_document:
+    keep_md: true
+---
 
 
 ## Loading and preprocessing the data
@@ -7,35 +12,7 @@ Policarpio A. Soberanis
 
 ```r
 library(dplyr)
-```
-
-```
-## 
-## Attaching package: 'dplyr'
-## 
-## The following objects are masked from 'package:stats':
-## 
-##     filter, lag
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union
-```
-
-```r
 library(data.table)
-```
-
-```
-## 
-## Attaching package: 'data.table'
-## 
-## The following objects are masked from 'package:dplyr':
-## 
-##     between, last
-```
-
-```r
 library(xtable)
 unzip('activity.zip')
 activity<-read.csv('activity.csv')
@@ -49,14 +26,14 @@ daily_data<-data.table(summarize(daily,Total_Steps=sum(steps),Avg_Steps=mean(ste
 hist(daily_data$Total_Steps,xlab='Number of Step',main='Total Steps Taken Daily')
 ```
 
-![](PA1_template_files/figure-html/Mean Total-1.png) 
+![plot of chunk Mean Total](figure/Mean Total-1.png) 
 
 ```r
 plot(daily_data$date,daily_data$Avg_Steps,xlab="Dates",ylab="Average Number of Step",main="Average Steps Per Day",xaxt="n")
 lines(daily_data$date,daily_data$Avg_Steps)
 ```
 
-![](PA1_template_files/figure-html/Mean Total-2.png) 
+![plot of chunk Mean Total](figure/Mean Total-2.png) 
 
 ```r
 tmp<-summary(activity)
@@ -79,7 +56,7 @@ plot(mean_steps_per_day$interval,mean_steps_per_day$avg_per_interval,xlab="Inter
 lines(mean_steps_per_day$interval,mean_steps_per_day$avg_per_interval)
 ```
 
-![](PA1_template_files/figure-html/Average Daily-1.png) 
+![plot of chunk Average Daily](figure/Average Daily-1.png) 
 
 ```r
 tmp1<-mean_steps_per_day[mean_steps_per_day$avg_per_interval==max(mean_steps_per_day$avg_per_interval)]
@@ -119,14 +96,14 @@ daily_data1<-data.table(summarize(daily1,Total_Steps=sum(steps),Avg_Steps=mean(s
 hist(daily_data1$Total_Steps,xlab='Number of Step',main='Total Steps Taken Daily')
 ```
 
-![](PA1_template_files/figure-html/New Data-1.png) 
+![plot of chunk New Data](figure/New Data-1.png) 
 
 ```r
 plot(daily_data1$date,daily_data1$Avg_Steps,xlab="Dates",ylab="Average Number of Step",main="Average Steps Per Day",xaxt="n")
 lines(daily_data1$date,daily_data1$Avg_Steps)
 ```
 
-![](PA1_template_files/figure-html/New Data-2.png) 
+![plot of chunk New Data](figure/New Data-2.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -145,6 +122,13 @@ library(lubridate)
 
 ```r
 library(ggplot2)
+```
+
+```
+## Need help? Try the ggplot2 mailing list: http://groups.google.com/group/ggplot2.
+```
+
+```r
 weekdays1 <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
 activity$weekday<-factor(weekdays(parse_date_time(activity$date,"%y-%m-%d")) %in% weekdays1,levels=c(TRUE,FALSE),labels=c('weekday','weekend'))
 spans1<-group_by(activity,interval,weekday)
@@ -153,6 +137,6 @@ p<-ggplot(mean_steps_per_day1,aes(x=interval,y=avg_per_interval,group=weekday,co
 p+geom_line()+facet_grid(weekday~.)+xlab("Interval")+ylab("Average # Steps")+ggtitle("Average Daily Steps Per Interval")
 ```
 
-![](PA1_template_files/figure-html/New Factor-1.png) 
+![plot of chunk New Factor](figure/New Factor-1.png) 
 
 Based on the plots there is a clear pattern to when there is an uptick in number of steps. There is also pattern in when the number of steps decrese in both weekend and weekdays. For both groups of data the maximum average daily seems to occur at roughly the same timeframe.
