@@ -24,9 +24,13 @@ daily_data<-data.table(summarize(daily,Total_Steps=sum(steps),Avg_Steps=mean(ste
 hist(daily_data$Total_Steps,xlab='Number of Step',main='Total Steps Taken Daily')
 plot(daily_data$date,daily_data$Avg_Steps,xlab="Dates",ylab="Average Number of Step",main="Average Steps Per Day",xaxt="n")
 lines(daily_data$date,daily_data$Avg_Steps)
-xt<-xtable(daily_data)
-print(xt,type="html")
+tmp<-summary(activity)
 ```
+The mean number of steps taken per day is:
+**`r tmp[4]`**
+
+The median number of steps taken per day is:
+**`r tmp[3]`**
 
 ## What is the average daily activity pattern?
 To determine the average daily pattern we plot the average number of steps takean across all days
@@ -53,10 +57,19 @@ total_NA<-sum(tmp)
 Upon further analysis of the data the number of rows with missing vales is `r total_NA`. We will use the average number of steps over all days for the corresponding 5 minute inveral.
 ```{r,results='asis'}
 indx<- activity$interval[tmp]
-activity$steps[tmp]<-mean_steps_per_day$avg_per_interval[indx] 
+activity$steps[tmp]<-mean_steps_per_day$avg_per_interval[indx]
+tmp<-summary(activity)
 ```
 
-With the missing data being estimated by the average number of steps over all days for the corresponding 5 minute interval, we see that the histogram now peaks at 35 instead of 25. With the imputed values we now have a much higher daily total number of steps. 
+With the missing data being estimated by the average number of steps over all days for the corresponding 5 minute interval, we see that the histogram now peaks at 35 instead of 25. With the imputed values we now have a much higher daily total number of steps.
+
+The mean number of steps taken per day with imputed values is:
+**`r tmp[4]`**
+
+The median number of steps taken per day with imputed values is:
+**`r tmp[3]`**
+
+Imputing the missing values has no effect on the mean and median of the overall data.
 
 ```{r New Data,results='asis'}
 daily1<-group_by(activity,date)
@@ -64,8 +77,7 @@ daily_data1<-data.table(summarize(daily1,Total_Steps=sum(steps),Avg_Steps=mean(s
 hist(daily_data1$Total_Steps,xlab='Number of Step',main='Total Steps Taken Daily')
 plot(daily_data1$date,daily_data1$Avg_Steps,xlab="Dates",ylab="Average Number of Step",main="Average Steps Per Day",xaxt="n")
 lines(daily_data1$date,daily_data1$Avg_Steps)
-xt<-xtable(daily_data1)
-print(xt,type="html")
+
 ```
 
 ## Are there differences in activity patterns between weekdays and weekends?
